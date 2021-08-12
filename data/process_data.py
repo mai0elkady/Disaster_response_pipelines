@@ -18,19 +18,22 @@ def clean_data(df):
     # up to the second to last character of each string with slicing
     category_colnames = row.apply(lambda x: x[0:-2]) 
     categories.columns = category_colnames
+    
     for column in categories:
         # set each value to be the last character of the string
         categories[column] = categories[column].astype(str).str[-1]
         # convert column from string to numeric
         categories[column] = pd.to_numeric(categories[column])
+    
+    # child_alone had the same value so drop it
+    categories = categories.drop(['child_alone'],axis = 1) #all similar values
+    categories['related'][categories['related']==2] = 0 # change 2 to 0
+    
     # drop the original categories column from `df`
     df = df.drop(['categories'],axis = 1)
     df = pd.concat([df,categories],axis = 1)
     #drop duplicates
-    #print(df.shape)
-    #print(df.duplicated().sum())
     df = df.drop_duplicates()
-    #print(df.shape)
     return df
 
 
@@ -38,7 +41,7 @@ def save_data(df, database_filename):
     engine = create_engine('sqlite:///{}'.format(database_filename))
 
     #engine = create_engine(database_filename)
-    df.to_sql('messages_categories', engine, index=False)  
+    df.to_sql('messages_categories_3', engine, index=False)  
 
 
 def main():
