@@ -8,8 +8,12 @@ from nltk.tokenize import word_tokenize
 from flask import Flask
 from flask import render_template, request, jsonify
 from plotly.graph_objs import Bar
-from sklearn.externals import joblib
+from plotly.graph_objs import Pie
+#from sklearn.externals import joblib
+import joblib
 from sqlalchemy import create_engine
+
+import sys
 
 
 app = Flask(__name__)
@@ -26,11 +30,11 @@ def tokenize(text):
     return clean_tokens
 
 # load data
-engine = create_engine('sqlite:///../data/YourDatabaseName.db')
-df = pd.read_sql_table('YourTableName', engine)
+engine = create_engine('sqlite:///../data/DisasterResponse.db')
+df = pd.read_sql_table('messages_categories_3', engine)
 
 # load model
-model = joblib.load("../models/your_model_name.pkl")
+model = joblib.load("../models/classifier_logreg.pkl")
 
 
 # index webpage displays cool visuals and receives user input text for model
@@ -39,12 +43,19 @@ model = joblib.load("../models/your_model_name.pkl")
 def index():
     
     # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
+    
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     
+    cat_counts = df.iloc[:,5:].sum(axis=0)
+    #cat_names = list(cat_counts.index)
+
+    cat_percent = (cat_counts*100)/cat_counts.sum()
+    cat_names = []
+    for ind in cat_percent.index:
+        cat_names.append(ind+" "+str(round(cat_percent[ind],2))+"%")
     # create visuals
-    # TODO: Below is an example - modify to create your own visuals
+    
     graphs = [
         {
             'data': [
@@ -61,6 +72,25 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+         {
+            'data': [
+                Pie(
+                    labels=cat_names,
+                    values=cat_counts,
+                    textposition='inside'
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Message Categories',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': ""
                 }
             }
         }
