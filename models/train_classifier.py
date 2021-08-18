@@ -158,6 +158,8 @@ def evaluate_model(model, X_test, Y_test, category_names):
     # print the average micro scores
     print(result)
     
+    return result[2] #return F1 score
+    
 
 def save_model(model, model_filepath):
     pickle.dump(model, open(model_filepath, 'wb'))
@@ -179,51 +181,80 @@ def main():
         
         #models_to_test = ['RF','LR','SVM']
     
-        models_to_test = ['RF']
+        models_to_test = ['LR','SVM']
+        train_vs_load = 'L'
         best_models = []
         scores = []
         
         for model_name in models_to_test:
             
             if(model_name == "RF"):
-                print('Building model with a random Forrest classifier...')
-                model = build_model_random_forrest()
+                if(train_vs_load == 'T'):
+                    print('Building model with a random Forrest classifier...')
+                    model = build_model_random_forrest()
 
-                print('Training model and cross validating the model...')
-                model.fit(X_train, Y_train)
-
+                    print('Training model and cross validating the model...')
+                    model.fit(X_train, Y_train)
+                    
+                    best_models.append(model.best_estimator_)
+                    
+                else:
+                    print('Loading pretrained model with random forrest...')
+                    model = joblib.load("../models/classifier_rf.pkl")
+                    
+                    best_models.append(model)
+                
                 print('Evaluating model...')
-                evaluate_model(model, X_test, Y_test, category_names)
-
-                best_models.append(model.best_estimator_)
-                scores.append(model.best_score_)
+                best_f1 = evaluate_model(model, X_test, Y_test, category_names)
+                scores.append(best_f1)
             
             elif(model_name == "LR"):
-                print('Building model with a logistic regression classifier...')
-                model = build_model_logreg()
-
-                print('Training model and cross validating the model...')
-                model.fit(X_train, Y_train)
-
+                
+                if(train_vs_load == 'T'):
+                    print('Building model with a logistic regression classifier...')
+                    model = build_model_logreg()
+                    
+                    print('Training model and cross validating the model...')
+                    model.fit(X_train, Y_train)
+                    
+                    best_models.append(model.best_estimator_)
+                    
+                else:
+                    print('Loading pretrained model with logistic regression...')
+                    model = joblib.load("../models/classifier_lr.pkl")
+                    
+                    best_models.append(model)
+                    
+                    
                 print('Evaluating model...')
-                evaluate_model(model, X_test, Y_test, category_names)
+                best_f1 = evaluate_model(model, X_test, Y_test, category_names)
+                scores.append(best_f1)
 
-                best_models.append(model.best_estimator_)
-                scores.append(model.best_score_)
             
             elif(model_name == "SVM"):
-                print('Building model with a SVM classifier...')
-                model = build_model_svm()
+                
+                if(train_vs_load == 'T'):
+                    print('Building model with a SVM classifier...')
+                    model = build_model_svm()
 
-                print('Training model and cross validating the model...')
-                model.fit(X_train, Y_train)
-
+                    print('Training model and cross validating the model...')
+                    model.fit(X_train, Y_train)
+                    
+                    best_models.append(model.best_estimator_)
+                    
+                else:
+                    print('Loading pretrained model with SVM...')
+                    model = joblib.load("../models/classifier_svm.pkl")
+                    
+                    best_models.append(model)
+                    
+                    
                 print('Evaluating model...')
-                evaluate_model(model, X_test, Y_test, category_names)
+                best_f1 = evaluate_model(model, X_test, Y_test, category_names)
+                scores.append(best_f1)
 
-                best_models.append(model.best_estimator_)
-                scores.append(model.best_score_)
 
+        print(scores)
         max_score = max(scores)
         ind_max = scores.index(max_score)
         best_model = best_models[ind_max]
