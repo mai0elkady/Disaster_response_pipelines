@@ -1,6 +1,6 @@
 # Disaster Response Pipeline Project
 In this project, I analyze disaster data from Figure Eight to build a model for an API that classifies disaster messages.
-The training data for this project contains pre-labeled messages from various real life disaster events (related to weather, food, military, ...etc.).
+The training data for this project contains pre-labeled messages from various real life disaster events (related to weather, food, military, ...etc.). Some screenshots of the site and results are presented in the screenshots folder.
 
 ### Instructions:
 1. Run the following commands in the project's root directory to set up your database and model.
