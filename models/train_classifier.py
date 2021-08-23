@@ -175,14 +175,10 @@ def main():
         X, Y, category_names = load_data(database_filepath)
         X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
         
-        # load model
-        #model = joblib.load("../models/classifier_lr.pkl")
-        #evaluate_model(model, X_test, Y_test, category_names)
         
-        #models_to_test = ['RF','LR','SVM']
+        models_to_test = ['RF','LR','SVM']
     
-        models_to_test = ['LR','SVM']
-        train_vs_load = 'L'
+        train_vs_load = 'T'
         best_models = []
         scores = []
         
