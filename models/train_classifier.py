@@ -44,6 +44,7 @@ def load_data(database_filepath):
 
     X = df['message'].values #these are the text values of the messages
     Y = df.iloc[:,4:] #these are the 35 categories
+    
     category_names = Y.columns.values
     return X,Y,category_names
 
@@ -162,6 +163,12 @@ def evaluate_model(model, X_test, Y_test, category_names):
     
 
 def save_model(model, model_filepath):
+    '''
+    To save a model to a specified filepath
+    Arguments:
+        model -> The model to be saved
+        model_filepath -> The filepath that the model should be saved to
+    '''
     pickle.dump(model, open(model_filepath, 'wb'))
     
 
