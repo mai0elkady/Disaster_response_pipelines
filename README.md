@@ -29,3 +29,22 @@ The project was build and testing using the following library versions:
 - SQLAlchemy-1.2.19
 - pickle-4.0
 
+### Files Description:
+1. app:
+    - templates: contains html files to be used for rendering the app
+    - run.py: script to run the Flask application
+2. data:
+    - DisasterResponse.db: the database that contains the cleaned data
+    - disaster_categories.csv: csv file that contains the raw categories data
+    - disaster_messages.csv: csv file that contains the raw message data
+    - process_data.py: script to preprocess and clean the raw data and save it to the database
+3. models:
+    - train_classifier.py: script to load the data, and train different classifiers
+4. notebooks:
+    - ETL_Pipeline_Preparation.ipynb: Notebook that summerizes process_data.py
+    - ML_Pipeline_Preparation.ipynb: Notebook that summerizes train_classifier.py
+5. screenshots: 
+    - contains screenshots of different examples of the application
+
+### Acknowledgements:
+The dataset was provided by Figure8, and the skelaton of the code was provided by Udacity 
