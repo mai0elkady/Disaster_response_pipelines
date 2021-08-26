@@ -40,7 +40,7 @@ def load_data(database_filepath):
     '''
     # load data from database
     engine = create_engine('sqlite:///'+database_filepath)
-    df = pd.read_sql_table('messages_categories_3',engine)
+    df = pd.read_sql_table('messages_categories',engine)
 
     X = df['message'].values #these are the text values of the messages
     Y = df.iloc[:,4:] #these are the 35 categories
